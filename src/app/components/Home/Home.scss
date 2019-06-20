@@ -83,6 +83,9 @@ $add-board-focus-bg: #ccc;
   &.pink {
     background: $pink;
   }
+  &.white {
+    background: $white;
+  }
 }
 
 .board-link:hover,
@@ -98,6 +101,9 @@ $add-board-focus-bg: #ccc;
   }
   &.red {
     background: $dark-red;
+  }
+  &.white {
+    background: $dark-white;
   }
 }
 

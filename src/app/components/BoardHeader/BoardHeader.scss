@@ -12,6 +12,23 @@
   padding: 8px 10px 5px 10px;
   color: $white;
   z-index: 1;
+  transition: background 0.3s;
+}
+
+.green .board-header {
+  background: $transparent-green;
+}
+.blue .board-header {
+  background: $transparent-blue;
+}
+.red .board-header {
+  background: $transparent-red;
+}
+.pink .board-header {
+  background: $transparent-pink;
+}
+.white .board-header {
+  background: #e08d00;
 }
 
 .board-header-right {

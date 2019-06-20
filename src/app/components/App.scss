@@ -40,3 +40,16 @@ a {
   font-size: 100%;
   font: inherit;
 }
+
+.text-center {
+  text-align: center;
+}
+
+.loader-icon {
+  height: 24px;
+  width: 24px;
+  margin: 0 4px;
+  position: absolute;
+  right: 0;
+  top: 8px;
+}

@@ -7,11 +7,12 @@ import CardBadges from "../CardBadges/CardBadges";
 import CardOptions from "./CardOptions";
 import { findCheckboxes } from "../utils";
 import "./CardModal.scss";
+import AirTableService from "../../reducers/AirTableService";
 
 class CardModal extends Component {
   static propTypes = {
     card: PropTypes.shape({
-      text: PropTypes.string.isRequired,
+      title: PropTypes.string,
       _id: PropTypes.string.isRequired,
       date: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
       color: PropTypes.string
@@ -29,8 +30,9 @@ class CardModal extends Component {
     super(props);
     this.state = {
       newText: props.card.text,
+      newTitle: props.card.title,
       isColorPickerOpen: false,
-      isTextareaFocused: true
+      isTextareaFocused: false
     };
     if (typeof document !== "undefined") {
       Modal.setAppElement("#app");
@@ -38,10 +40,11 @@ class CardModal extends Component {
   }
 
   componentWillReceiveProps = nextProps => {
-    this.setState({ newText: nextProps.card.text });
+    this.setState({ newText: nextProps.card.text, newTitle: nextProps.card.title });
   };
 
   handleKeyDown = event => {
+    console.log("keydonw");
     if (event.keyCode === 13 && event.shiftKey === false) {
       event.preventDefault();
       this.submitCard();
@@ -49,14 +52,14 @@ class CardModal extends Component {
   };
 
   submitCard = () => {
-    const { newText } = this.state;
+    const { newText, newTitle } = this.state;
     const { card, listId, dispatch, toggleCardEditor } = this.props;
-    if (newText === "") {
-      this.deleteCard();
-    } else if (newText !== card.text) {
+    if (newTitle !== card.title || newText !== card.text) {
+      AirTableService.updateCardData(window, {cardId: card._id, board: {Description: newText, Name: newTitle}});
       dispatch({
         type: "CHANGE_CARD_TEXT",
         payload: {
+          cardTitle: newTitle,
           cardText: newText,
           cardId: card._id,
           listId
@@ -70,6 +73,10 @@ class CardModal extends Component {
     this.setState({ newText: event.target.value });
   };
 
+  handleTitleChange = event => {
+    this.setState({ newTitle: event.target.value });
+  };
+
   toggleColorPicker = () => {
     this.setState({ isColorPickerOpen: !this.state.isColorPickerOpen });
   };
@@ -80,10 +87,11 @@ class CardModal extends Component {
     if (!isColorPickerOpen) {
       toggleCardEditor();
     }
+    this.submitCard();
   };
 
   render() {
-    const { newText, isColorPickerOpen, isTextareaFocused } = this.state;
+    const { newText = "", isColorPickerOpen, isTextareaFocused, newTitle } = this.state;
     const { cardElement, card, listId, isOpen } = this.props;
     if (!cardElement) {
       return null;
@@ -149,23 +157,27 @@ class CardModal extends Component {
           style={{
             minHeight: isThinDisplay ? "none" : boundingRect.height,
             width: isThinDisplay ? "100%" : boundingRect.width,
-            boxShadow: isTextareaFocused
-              ? "0px 0px 3px 2px rgb(0, 180, 255)"
-              : null,
+            boxShadow: "0px 0px 3px 2px rgb(0, 180, 255)",
             background: card.color
           }}
         >
           <Textarea
-            autoFocus
-            useCacheForDOMMeasurements
-            value={newText}
-            onChange={this.handleChange}
-            onKeyDown={this.handleKeyDown}
-            className="modal-textarea"
-            spellCheck={false}
-            onFocus={() => this.setState({ isTextareaFocused: true })}
-            onBlur={() => this.setState({ isTextareaFocused: false })}
-          />
+              useCacheForDOMMeasurements
+              value={newTitle}
+              onChange={this.handleTitleChange}
+              onKeyDown={this.handleKeyDown}
+              className="modal-textarea modal-textarea-title"
+              spellCheck={true}
+              onFocus={() => this.setState({ isTextareaFocused: true })} />
+
+          <Textarea
+              useCacheForDOMMeasurements
+              value={newText}
+              onChange={this.handleChange}
+              onKeyDown={this.handleKeyDown}
+              className="modal-textarea"
+              spellCheck={true}
+              onFocus={() => this.setState({ isTextareaFocused: true })} />
           {(card.date || checkboxes.total > 0) && (
             <CardBadges date={card.date} checkboxes={checkboxes} />
           )}

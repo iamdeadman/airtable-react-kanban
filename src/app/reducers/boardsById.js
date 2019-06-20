@@ -39,7 +39,7 @@ const boardsById = (state = {}, action) => {
           title: boardTitle,
           lists: [],
           users: [userId],
-          color: "blue"
+          color: "white"
         }
       };
     }

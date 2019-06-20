@@ -2,6 +2,7 @@
 
 .card-adder-textarea-wrapper {
   margin: 6px 13px 0 13px;
+  position: relative;
 }
 
 .card-adder-textarea {
@@ -20,11 +21,12 @@
 .add-card-button {
   align-self: center;
   flex-shrink: 0;
-  width: 39px;
-  height: 39px;
+  width: 40px;
+  height: 40px;
   margin-top: 6px;
+  margin-bottom: 6px;
   border: none;
-  border-radius: $list-radius;
+  border-radius: 20px;
   color: $white;
   background: $transparent-black;
   font-size: 28px;

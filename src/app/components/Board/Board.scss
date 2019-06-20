@@ -27,12 +27,15 @@
 .pink .board-underlay {
   background: $pink;
 }
+.white .board-underlay {
+  background: #e2e2e2;
+}
 
 .lists-wrapper {
   display: inline-flex;
   box-sizing: border-box;
   height: 100%;
-  padding: 85px 5px 8px 5px;
+  padding: 96px 5px 8px 5px;
 }
 
 .lists {

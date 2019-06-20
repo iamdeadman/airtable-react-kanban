@@ -1,12 +1,16 @@
 const cardsById = (state = {}, action) => {
   switch (action.type) {
     case "ADD_CARD": {
-      const { cardText, cardId } = action.payload;
-      return { ...state, [cardId]: { text: cardText, _id: cardId } };
+      const { cardText, cardId, listTitle } = action.payload;
+      return { ...state, [cardId]: { title: cardText, _id: cardId, text: "", priority: listTitle} };
     }
     case "CHANGE_CARD_TEXT": {
-      const { cardText, cardId } = action.payload;
-      return { ...state, [cardId]: { ...state[cardId], text: cardText } };
+      const { cardText, cardId, cardTitle } = action.payload;
+      return { ...state, [cardId]: { ...state[cardId], text: cardText, title: cardTitle } };
+    }
+    case "MOVE_CARD": {
+      const { cardId, listTitle } = action.payload;
+      return {...state, [cardId]: {...state[cardId], priority: listTitle}};
     }
     case "CHANGE_CARD_DATE": {
       const { date, cardId } = action.payload;

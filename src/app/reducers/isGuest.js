@@ -1,4 +1,4 @@
-const isGuest = (state = false, action) => {
+const isGuest = (state = true, action) => {
   switch (action.type) {
     case "ENTER_AS_GUEST": {
       return true;

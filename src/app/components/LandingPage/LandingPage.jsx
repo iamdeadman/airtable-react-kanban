@@ -21,7 +21,7 @@ class LandingPage extends Component {
 
   render = () => (
     <div className="landing-page">
-      <Title>Sign in | React Kanban</Title>
+      <Title>Sign in | Airtable Kanban</Title>
       <div className="landing-page-background">
         <img
           srcSet={`${background1920} 1920w, ${background1366} 1366w`}
@@ -34,11 +34,11 @@ class LandingPage extends Component {
           <div className="landing-page-heading">
             <img
               src={kanbanLogo}
-              alt="React Kanban logo"
+              alt="Airtable Kanban logo"
               className="landing-page-logo"
             />
             &nbsp;
-            <h1>React Kanban</h1>
+            <h1>Airtable Kanban</h1>
           </div>
           <p className="landing-page-description">
             An open source kanban application inspired by Trello. Check out the

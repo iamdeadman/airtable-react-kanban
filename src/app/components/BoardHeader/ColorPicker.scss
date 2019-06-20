@@ -70,4 +70,10 @@
       background: $dark-pink;
     }
   }
+  &.white {
+    background: $white;
+    &:focus {
+      background: $dark-white;
+    }
+  }
 }

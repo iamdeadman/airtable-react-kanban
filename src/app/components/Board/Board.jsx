@@ -9,6 +9,7 @@ import ListAdder from "../ListAdder/ListAdder";
 import Header from "../Header/Header";
 import BoardHeader from "../BoardHeader/BoardHeader";
 import "./Board.scss";
+import AirTableService from "../../reducers/AirTableService";
 
 class Board extends Component {
   static propTypes = {
@@ -65,6 +66,11 @@ class Board extends Component {
       source.index !== destination.index ||
       source.droppableId !== destination.droppableId
     ) {
+      const cardId = this.props.lists[this.props.lists.map(function(it){return it._id;}).indexOf(source.droppableId)].cards[source.index];
+      const listTitle = this.props.lists[this.props.lists.map(function(it){return it._id;}).indexOf(destination.droppableId)].title;
+
+      AirTableService.updateCardData(window, {cardId: cardId, board: {Priority: listTitle}});
+
       dispatch({
         type: "MOVE_CARD",
         payload: {
@@ -72,7 +78,7 @@ class Board extends Component {
           destListId: destination.droppableId,
           oldCardIndex: source.index,
           newCardIndex: destination.index,
-          boardId
+          boardId, cardId, listTitle
         }
       });
     }
@@ -136,7 +142,7 @@ class Board extends Component {
     return (
       <>
         <div className={classnames("board", boardColor)}>
-          <Title>{boardTitle} | React Kanban</Title>
+          <Title>{boardTitle} | Airtable Kanban</Title>
           <Header />
           <BoardHeader />
           {/* eslint-disable jsx-a11y/no-static-element-interactions */}
@@ -163,7 +169,7 @@ class Board extends Component {
                       />
                     ))}
                     {provided.placeholder}
-                    <ListAdder boardId={boardId} />
+                    {/*<ListAdder boardId={boardId} />*/}
                   </div>
                 )}
               </Droppable>

@@ -5,6 +5,9 @@ import Textarea from "react-textarea-autosize";
 import shortid from "shortid";
 import ClickOutside from "../ClickOutside/ClickOutside";
 import "./CardAdder.scss";
+import AirTableService from "../../reducers/AirTableService";
+import ImageLoader from "../../../assets/images/loading.gif";
+import classnames from "classnames";
 
 class CardAdder extends Component {
   static propTypes = {
@@ -15,8 +18,9 @@ class CardAdder extends Component {
   constructor() {
     super();
     this.state = {
-      newText: "",
-      isOpen: false
+      newTitle: "",
+      isOpen: false,
+      isLoading: false
     };
   }
 
@@ -25,7 +29,7 @@ class CardAdder extends Component {
   };
 
   handleChange = event => {
-    this.setState({ newText: event.target.value });
+    this.setState({ newTitle: event.target.value });
   };
 
   handleKeyDown = event => {
@@ -38,21 +42,31 @@ class CardAdder extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    const { newText } = this.state;
-    const { listId, dispatch } = this.props;
-    if (newText === "") return;
+    const { newTitle } = this.state;
+    const { listId, dispatch, listTitle } = this.props;
+    if (newTitle === "") return;
 
-    const cardId = shortid.generate();
-    dispatch({
-      type: "ADD_CARD",
-      payload: { cardText: newText, cardId, listId }
+    const AIR_PAYLOAD = {Name: newTitle};
+    if(listTitle !== "uncategorized") AIR_PAYLOAD["Priority"] = listTitle;
+    this.setState({ isLoading: true });
+    AirTableService.addCardData(window, AIR_PAYLOAD).then(response => {
+      try {
+        dispatch({
+          type: "ADD_CARD",
+          payload: { cardText: newTitle, cardId: response.data.data, listId, listTitle }
+        });
+        this.toggleCardComposer();
+        this.setState({ newTitle: "",  isLoading: false });
+      } catch(error){
+        console.error(error)
+      }
+    }).catch(error => {
+      console.error(error);
     });
-    this.toggleCardComposer();
-    this.setState({ newText: "" });
   };
 
   render() {
-    const { newText, isOpen } = this.state;
+    const { newTitle, isOpen, isLoading } = this.state;
     return isOpen ? (
       <ClickOutside handleClickOutside={this.toggleCardComposer}>
         <form
@@ -65,12 +79,15 @@ class CardAdder extends Component {
             minRows={1}
             onChange={this.handleChange}
             onKeyDown={this.handleKeyDown}
-            value={newText}
+            value={newTitle}
             className="card-adder-textarea"
             placeholder="Add a new card..."
             spellCheck={false}
             onBlur={this.toggleCardComposer}
           />
+          <img src={ImageLoader} className={classnames("loader-icon", {
+            "hide": !isLoading
+          })} />
         </form>
       </ClickOutside>
     ) : (

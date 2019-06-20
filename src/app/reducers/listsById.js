@@ -64,6 +64,15 @@ const listsById = (state = {}, action) => {
       const { [listId]: deletedList, ...restOfLists } = state;
       return restOfLists;
     }
+    case "TOGGLE_LIST": {
+      const { listId } = action.payload;
+      return {
+        ...state, [listId]: {
+          ...state[listId],
+          isCollapsed: !state[listId].isCollapsed
+        }
+      };
+    }
     default:
       return state;
   }

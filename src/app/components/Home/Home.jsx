@@ -25,7 +25,7 @@ class Home extends Component {
     const { boards, listsById, history } = this.props;
     return (
       <>
-        <Title>Home | React Kanban</Title>
+        <Title>Home | Airtable Kanban</Title>
         <Header />
         <div className="home">
           <div className="main-content">
@@ -56,7 +56,7 @@ class Home extends Component {
                   </div>
                 </Link>
               ))}
-              <BoardAdder history={history} />
+              {/*<BoardAdder history={history} />*/}
             </div>
           </div>
         </div>

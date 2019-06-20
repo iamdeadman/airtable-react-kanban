@@ -48,7 +48,7 @@ app.use("/static", express.static("dist/public", { maxAge: "1y" }));
 app.use(passport.initialize());
 app.use(passport.session());
 // app.use("/auth", auth);
-// app.use("/api", api(db));
+app.use("/api", api());
 // app.use(fetchBoardData(db));
 app.use(fetchBoardData());
 app.get("*", renderPage);

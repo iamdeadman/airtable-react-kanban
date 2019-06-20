@@ -8,12 +8,13 @@ import CardBadges from "../CardBadges/CardBadges";
 import { findCheckboxes } from "../utils";
 import formatMarkdown from "./formatMarkdown";
 import "./Card.scss";
+import AirTableService from "../../reducers/AirTableService";
 
 class Card extends Component {
   static propTypes = {
     card: PropTypes.shape({
       _id: PropTypes.string.isRequired,
-      text: PropTypes.string.isRequired,
+      title: PropTypes.string,
       color: PropTypes.string
     }).isRequired,
     listId: PropTypes.string.isRequired,
@@ -67,16 +68,18 @@ class Card extends Component {
       return newString;
     });
 
+    AirTableService.updateCardData(window, {cardId: card._id, board: {Description: newText, Name: card.title}});
+
     dispatch({
       type: "CHANGE_CARD_TEXT",
-      payload: { cardId: card._id, cardText: newText }
+      payload: { cardId: card._id, cardText: newText, cardTitle: card.title }
     });
   };
 
   render() {
     const { card, index, listId, isDraggingOver } = this.props;
     const { isModalOpen } = this.state;
-    const checkboxes = findCheckboxes(card.text);
+    const checkboxes = findCheckboxes(card.text || "");
     return (
       <>
         <Draggable draggableId={card._id} index={index}>
@@ -107,9 +110,15 @@ class Card extends Component {
                 }}
               >
                 <div
+                  className="card-title-text"
+                  dangerouslySetInnerHTML={{
+                    __html: formatMarkdown(card.title || "")
+                  }}
+                />
+                <div
                   className="card-title-html"
                   dangerouslySetInnerHTML={{
-                    __html: formatMarkdown(card.text)
+                    __html: formatMarkdown(card.text || "")
                   }}
                 />
                 {/* eslint-enable */}

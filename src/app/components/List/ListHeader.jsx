@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import Textarea from "react-textarea-autosize";
-import { Button, Wrapper, Menu, MenuItem } from "react-aria-menubutton";
-import FaTrash from "react-icons/lib/fa/trash";
+import classnames from "classnames";
 import "./ListHeader.scss";
+import FaCompress from "react-icons/lib/fa/compress";
+import FaExpand from "react-icons/lib/fa/expand";
 
 class ListTitle extends Component {
   static propTypes = {
@@ -62,6 +62,11 @@ class ListTitle extends Component {
     });
   };
 
+  toggleList = () => {
+    const { listId, boardId, dispatch } = this.props;
+    dispatch({type: "TOGGLE_LIST", payload: {listId, boardId}});
+  };
+
   openTitleEditor = () => {
     this.setState({ isOpen: true });
   };
@@ -75,24 +80,10 @@ class ListTitle extends Component {
 
   render() {
     const { isOpen, newTitle } = this.state;
-    const { dragHandleProps, listTitle } = this.props;
+    const { dragHandleProps, listTitle, isCollapsed} = this.props;
     return (
       <div className="list-header">
-        {isOpen ? (
-          <div className="list-title-textarea-wrapper">
-            <Textarea
-              autoFocus
-              useCacheForDOMMeasurements
-              value={newTitle}
-              onChange={this.handleChange}
-              onKeyDown={this.handleKeyDown}
-              className="list-title-textarea"
-              onBlur={this.handleSubmit}
-              spellCheck={false}
-            />
-          </div>
-        ) : (
-          <div
+        <div
             {...dragHandleProps}
             role="button"
             tabIndex={0}
@@ -101,20 +92,16 @@ class ListTitle extends Component {
               this.handleButtonKeyDown(event);
               dragHandleProps.onKeyDown(event);
             }}
-            className="list-title-button"
-          >
-            {listTitle}
-          </div>
-        )}
-        <Wrapper className="delete-list-wrapper" onSelection={this.deleteList}>
-          <Button className="delete-list-button">
-            <FaTrash />
-          </Button>
-          <Menu className="delete-list-menu">
-            <div className="delete-list-header">Are you sure?</div>
-            <MenuItem className="delete-list-confirm">Delete</MenuItem>
-          </Menu>
-        </Wrapper>
+            className={classnames("list-title-button", listTitle.toLowerCase())}>
+          <span>{listTitle}</span>
+        </div>
+        <div className="toggle-list-button" onClick={this.toggleList}>
+          {!isCollapsed ? (
+              <FaExpand />
+          ) : (
+              <FaCompress />
+          )}
+        </div>
       </div>
     );
   }

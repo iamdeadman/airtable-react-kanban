@@ -34,9 +34,10 @@ const configurePassport = db => {
               imageUrl: profile._json.profile_image_url
             };
             users.insertOne(newUser).then(() => {
-              boards
-                .insertOne(createWelcomeBoard(profile.id))
-                .then(() => cb(null, newUser));
+              cb(null, newUser);
+              // boards
+                // .insertOne(createWelcomeBoard(profile.id))
+                // .then(() => cb(null, newUser));
             });
           }
         });
@@ -61,9 +62,10 @@ const configurePassport = db => {
               imageUrl: profile._json.image.url
             };
             users.insertOne(newUser).then(() => {
-              boards
-                .insertOne(createWelcomeBoard(profile.id))
-                .then(() => cb(null, newUser));
+              cb(null, newUser);
+              // boards
+              //   .insertOne(createWelcomeBoard(profile.id))
+              //   .then(() => cb(null, newUser));
             });
           }
         });

@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { Draggable } from "react-beautiful-dnd";
 import classnames from "classnames";
 import ListHeader from "./ListHeader";
+import ListHeaderVertical from "./ListHeaderCollapsed";
 import Cards from "./Cards";
 import CardAdder from "../CardAdder/CardAdder";
 import "./List.scss";
@@ -28,25 +29,43 @@ class List extends Component {
             <div
               ref={provided.innerRef}
               {...provided.draggableProps}
-              className="list-wrapper"
+              className={classnames("list-wrapper", {
+                  "list-is-collapsed": list.isCollapsed
+              })}
             >
               <div
                 className={classnames("list", {
                   "list--drag": snapshot.isDragging
                 })}
               >
-                <ListHeader
-                  dragHandleProps={provided.dragHandleProps}
-                  listTitle={list.title}
-                  listId={list._id}
-                  cards={list.cards}
-                  boardId={boardId}
-                />
-                <div className="cards-wrapper">
-                  <Cards listId={list._id} />
-                </div>
+                {!list.isCollapsed ? (
+                    <div>
+                      <ListHeader
+                          dragHandleProps={provided.dragHandleProps}
+                          listTitle={list.title}
+                          listId={list._id}
+                          cards={list.cards}
+                          isCollapsed={list.isCollapsed}
+                          boardId={boardId}
+                      />
+                      <div className="cards-wrapper">
+                        <Cards listId={list._id} />
+                      </div>
+                      <div className="text-center">
+                        <CardAdder listId={list._id} listTitle={list.title} />
+                      </div>
+                    </div>
+                ) : (
+                    <ListHeaderVertical
+                        dragHandleProps={provided.dragHandleProps}
+                        listTitle={list.title}
+                        listId={list._id}
+                        cards={list.cards}
+                        boardId={boardId}
+                        isCollapsed={list.isCollapsed}
+                    />
+                )}
               </div>
-              <CardAdder listId={list._id} />
             </div>
             {provided.placeholder}
           </>
