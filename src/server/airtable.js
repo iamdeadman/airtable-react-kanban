@@ -5,14 +5,14 @@ import shortid from "shortid";
 const appendAttributes = list => list.map(card => ({ color: "white", ...card }));
 
 const BUGS_ISSUES_BASE = {
-    BASE_ID: "appmeXBK72YLuGeFH",
-    BASE_TITLE: "Bugs & Issues",
-    BASE_VIEW: "Bugs by Priority"
+    BASE_ID: process.env.AIRTABLE_BASE_ID || "appmeXBK72YLuGeFH",
+    BASE_TITLE: process.env.AIRTABLE_BASE_TITLE || "Bugs & Issues",
+    BASE_VIEW: process.env.AIRTABLE_BASE_VIEW || "Bugs by Priority"
 };
 
 AIRTABLE.configure({
     endpointUrl: 'https://api.airtable.com',
-    apiKey: ''
+    apiKey: process.env.AIRTABLE_API_KEY
 });
 
 const AIRTABLE_BASE = AIRTABLE.base(BUGS_ISSUES_BASE.BASE_ID);
